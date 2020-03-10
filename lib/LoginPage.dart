@@ -4,6 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:streaming_app/HomePage.dart';
 import 'package:streaming_app/SignIn.dart';
 import 'package:streaming_app/Signup.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 class LoginPage extends StatelessWidget{
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -21,8 +23,17 @@ class LoginPage extends StatelessWidget{
   print("signed in " + user.displayName);
   return user;
 }
+  requestPermissions() async {
+    await PermissionHandler().requestPermissions([
+      PermissionGroup.storage,
+      PermissionGroup.photos,
+    ]);
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    requestPermissions();
     BoxDecoration decoration=BoxDecoration(
       borderRadius: BorderRadius.circular(10),
       color: Colors.redAccent

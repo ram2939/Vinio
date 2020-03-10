@@ -21,18 +21,18 @@ dependencies:
     sdk: flutter
   firebase_auth: ^0.15.4
   google_sign_in: ^4.1.1
-  camera: ^0.5.7+3
-  flutter_android_pip:
-    git:
-      url: https://github.com/ram2939/flutter_android_pip
+  camera: ^0.5.7+4
+  # flutter_android_pip:
+  #   git:
+  #     url: https://github.com/ram2939/flutter_android_pip
   # screen_recorder:
   #   git:
   #     url: https://github.com/ram2939/screen_recorder
   # screen_recorder:
     # path: ../screen_recorder
-  flutter_screen_recording: 
-    path: ../flutter_screen_recording
-  permission_handler: ^4.1.0
+  # flutter_screen_recording: 
+  #   path: ../flutter_screen_recording
+  permission_handler: ^4.4.0
 
   # flutter_screen_recorder: ^0.0.1
 

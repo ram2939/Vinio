@@ -43,16 +43,15 @@ class _CameraAppState extends State<CameraApp> {
     // if (!controller.value.isInitialized) {
     //   return Container();
     // }
-    double aspectRatio=controller.value.aspectRatio;
-    if(pip)
-    aspectRatio=1/1;
-    // return Scaffold(
+      // return Scaffold(
     //       appBar: AppBar(title: Text("Camera")),
     //       body:
       return Container(
               child: controller!=null
           ? AspectRatio(
-            aspectRatio:aspectRatio,
+            aspectRatio: pip!=true
+            ? controller.value.aspectRatio
+            : 1/1,
             child: CameraPreview(controller))
            :Center(
              child: CircularProgressIndicator(

@@ -32,10 +32,10 @@ class MainActivity: FlutterActivity(),HBRecorderListener{
             } else if(call.method == "Stop") {
                 hbRecorder.stopScreenRecording();
             }
-            else if(call.method == "PIP") {
-                enterPictureInPictureMode(PictureInPictureParams.Builder().setAspectRatio(Rational(1,1)).build());
-            //  
-            }
+            // else if(call.method == "PIP") {
+            //     enterPictureInPictureMode(PictureInPictureParams.Builder().setAspectRatio(Rational(1,1)).build());
+            // //  
+            // }
             else {
                 result.notImplemented()
             }
@@ -65,6 +65,7 @@ class MainActivity: FlutterActivity(),HBRecorderListener{
         var hbRecorder:HBRecorder=HBRecorder(this,this);
         if (requestCode == SCREEN_RECORD_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                enterPictureInPictureMode(PictureInPictureParams.Builder().setAspectRatio(Rational(1,1)).build());
                 //Start screen recording
                 hbRecorder.startScreenRecording(data, resultCode, this);
     
