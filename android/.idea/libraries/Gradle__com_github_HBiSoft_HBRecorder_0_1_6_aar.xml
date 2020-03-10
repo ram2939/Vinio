@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.HBiSoft:HBRecorder:0.1.6@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c99af19a607185863f947f0759330dfa/HBRecorder-0.1.6/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c99af19a607185863f947f0759330dfa/HBRecorder-0.1.6/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.HBiSoft/HBRecorder/0.1.6/1afdc47134d1b646c532c69982e671966c6bdfc1/HBRecorder-0.1.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
