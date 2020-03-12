@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:streaming_app/HomePage.dart';
 class SignIn extends StatefulWidget {
   @override
@@ -8,7 +10,7 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
-  String email = "", password = "";
+    String email = "", password = "";
   TextEditingController _email, _pass;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
@@ -97,7 +99,7 @@ class SignInState extends State<SignIn> {
                 height: 50,
                 width: 150,),
                 onTap: () {
-                  signin();
+                  signin(context);
                 },
               )
             ],
@@ -107,7 +109,8 @@ class SignInState extends State<SignIn> {
     );
   }
 
-  Future<void> signin() async {
+  Future<void> signin(BuildContext) async {
+      final storage=Provider.of<FlutterSecureStorage>(context,listen: false);
     final formState = formKey.currentState;
     if (formState.validate()) {
       formState.save();
@@ -115,6 +118,9 @@ class SignInState extends State<SignIn> {
         FirebaseUser user = (await FirebaseAuth.instance
                 .signInWithEmailAndPassword(email: email, password: password))
             .user;
+          await storage.write(key: "1", value: "email");
+          await storage.write(key: "2", value: email);
+          await storage.write(key: "3", value: password);
          Navigator.pop(context);
          Navigator.pushReplacement(
              context, MaterialPageRoute(builder: (context) => new HomePage(user)));

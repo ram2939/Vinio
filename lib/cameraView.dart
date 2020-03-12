@@ -15,9 +15,9 @@ class _CameraAppState extends State<CameraApp> {
   CameraController controller;
   bool pip;
   _CameraAppState(this.pip);
-  call() async{
+  call(int x) async {
     cameras = await availableCameras();
-    controller = CameraController(cameras[1], ResolutionPreset.medium);
+    controller = CameraController(cameras[x], ResolutionPreset.medium);
     controller.initialize().then((_) {
       if (!mounted) {
         return;
@@ -25,10 +25,11 @@ class _CameraAppState extends State<CameraApp> {
       setState(() {});
     });
   }
+
   @override
   void initState() {
     super.initState();
-    call();
+    call(1);
     // FlutterAndroidPip.enterPictureInPictureMode(1);
   }
 
@@ -40,23 +41,39 @@ class _CameraAppState extends State<CameraApp> {
 
   @override
   Widget build(BuildContext context) {
-    // if (!controller.value.isInitialized) {
-    //   return Container();
-    // }
-      // return Scaffold(
-    //       appBar: AppBar(title: Text("Camera")),
-    //       body:
-      return Container(
-              child: controller!=null
-          ? AspectRatio(
-            aspectRatio: pip!=true
-            ? controller.value.aspectRatio
-            : 1/1,
-            child: CameraPreview(controller))
-           :Center(
-             child: CircularProgressIndicator(
-          ),
-          )
-           );
+    if (controller == null) {
+      return Container();
+    } else
+      return Stack(
+          alignment: AlignmentDirectional.bottomEnd,
+          children: <Widget>[
+            controller != null
+                ? AspectRatio(
+                    aspectRatio:
+                        pip != true ? controller.value.aspectRatio : 1 / 1,
+                    child: CameraPreview(controller))
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ),
+            controller.description == cameras[0]
+                ? IconButton(
+                    icon: Icon(Icons.camera_front),
+                    iconSize: 50,
+                    onPressed: () {
+                      call(1);
+                      // CameraController(cameras[1], ResolutionPreset.medium);
+                    },
+                    tooltip: "Switch to Front Camera",
+                  )
+                : IconButton(
+                    icon: Icon(Icons.camera_rear),
+                    iconSize: 50,
+                    onPressed: () {
+                      call(0);
+                      //CameraController(cameras[0], ResolutionPreset.medium);
+                    },
+                    tooltip: "Switch to rear Camera",
+                  )
+          ]);
   }
 }
