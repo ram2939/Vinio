@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:provider/provider.dart';
 import 'package:streaming_app/HomePage.dart';
@@ -14,7 +15,7 @@ class LoginPage extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<FirebaseUser> _handleSignIn(BuildContext context) async {
-    // final storage=Provider.of<FlutterSecureStorage>(context,listen: false);
+    final storage=FlutterSecureStorage();
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -26,9 +27,9 @@ class LoginPage extends StatelessWidget {
 
     final FirebaseUser user =
         (await _auth.signInWithCredential(credential)).user;
-    // await storage.write(key: "1", value: "google");
-    // await storage.write(key: "2", value: googleAuth.accessToken);
-    // await storage.write(key: "1", value: googleAuth.idToken);
+    await storage.write(key: "1", value: "google");
+    await storage.write(key: "2", value: googleAuth.accessToken);
+    await storage.write(key: "3", value: googleAuth.idToken);
     print("signed in " + user.displayName);
     return user;
   }

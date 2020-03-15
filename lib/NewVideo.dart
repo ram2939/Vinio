@@ -19,19 +19,10 @@ class _NewVideoState extends State<NewVideo> {
   String fileName;
   FirebaseUser user;
   _NewVideoState(this.fileName, this.user);
-  // static const platform = const MethodChannel('samples.flutter.dev/battery');
   bool pip = false;
   bool rec = false;
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text(user.email),
-    //     actions: <Widget>[
-    //       IconButton(icon: Icon(Icons.exit_to_app), onPressed:null),
-    //     ],
-    //   ),
-    // body:
     return Material(
       child: ListView(
         children: <Widget>[
@@ -72,7 +63,6 @@ class _NewVideoState extends State<NewVideo> {
                         iconSize: 50,
                         onPressed: () async {
                           ScreenRecorder.stopRecordScreen;
-                          // Provider.of<Function>(context);
                           Fluttertoast.showToast(
                               msg: "$fileName.mp4 successfully saved");
                           Navigator.pushReplacement(
@@ -84,20 +74,14 @@ class _NewVideoState extends State<NewVideo> {
                   )
                 : Container()
           ]),
-          RaisedButton(
+          FlatButton(
+            clipBehavior: Clip.hardEdge,
+            textColor: Colors.blueAccent,
             child: Text("Enter Small Screen mode"),
             onPressed: () async {
               ScreenRecorder.PIPmode;
             },
           )
-
-          //  RaisedButton(
-          //   child: Text("Pause/Resume"),
-          //   onPressed: () async{
-          //   //  final result=await FlutterScreenRecording.stopRecordScreen;
-          //                 // print(result);
-          //                 ScreenRecorder.
-          // }),
         ],
       ),
     );

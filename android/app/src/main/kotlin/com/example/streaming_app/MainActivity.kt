@@ -1,4 +1,5 @@
 package com.example.streaming_app
+import android.net.Uri;
 import android.os.Environment;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -31,6 +32,7 @@ class MainActivity: FlutterActivity(),HBRecorderListener{
     // private var hbRecorder:HBRecorder=HBRecorder(this,this);
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         hbRecorder = HBRecorder(this, this);
+        hbRecorder.recordHDVideo(false);
         val file:File= File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString()+"/StreamingApp");
         if(!file.exists()) { file.mkdirs();}
         hbRecorder.setOutputPath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString()+"/StreamingApp");
@@ -52,11 +54,22 @@ class MainActivity: FlutterActivity(),HBRecorderListener{
             else if(call.method == "Pip") {
             enterPictureInPictureMode(PictureInPictureParams.Builder().setAspectRatio(Rational(1,1)).build());        
            }
+           else if(call.method=="changeHD"){
+               hbRecorder.recordHDVideo(true);
+           }
             else {
                 result.notImplemented()
             }
           }
     }
+    // fun playVideo(url:String)
+    // {
+    //     val intent: Intent=Intent(Intent.ACTION_VIEW);
+    //         val uri:Uri=Uri.fromFile(File(url));
+    //         intent.setDataAndType(uri, "video/*");
+    //         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    //         startActivity(intent);
+    //     }
     override fun HBRecorderOnError(p0: Int,p1: String)
     {
 

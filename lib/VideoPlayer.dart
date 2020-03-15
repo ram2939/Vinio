@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -14,22 +14,31 @@ class VideoPlayerScreen extends StatefulWidget {
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   String path;
+  ChewieController chewieController;
   VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
+  // Future<void> _initializeVideoPlayerFuture;
   _VideoPlayerScreenState(this.path);
   @override
   void initState() {
+
     // Create and store the VideoPlayerController. The VideoPlayerController
     // offers several different constructors to play videos from assets, files,
     // or the internet.
     _controller = VideoPlayerController.file(File(path));
     // network(path);
-
+    chewieController = ChewieController(
+  videoPlayerController: _controller,
+  aspectRatio: 2 / 4,
+  autoInitialize: true,
+  autoPlay: false,
+  looping: false,
+  startAt: Duration(milliseconds: 10)
+);
     // Initialize the controller and store the Future for later use.
-    _initializeVideoPlayerFuture = _controller.initialize();
+    // _initializeVideoPlayerFuture = _controller.initialize();
 
     // Use the controller to loop the video.
-    _controller.setLooping(true);
+    // _controller.setLooping(false);
 
     super.initState();
   }
@@ -48,45 +57,51 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       appBar: AppBar(title: Text(path.split('/').last)),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.
-      body: FutureBuilder(
-        future: _initializeVideoPlayerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If the VideoPlayerController has finished initialization, use
+      body:
+      //  FutureBuilder(
+      //   future: _initializeVideoPlayerFuture,
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.done) {
+      //       // If the VideoPlayerController has finished initialization, use
             // the data it provides to limit the aspect ratio of the video.
-            return Center(
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                // Use the VideoPlayer widget to display the video.
-                child: VideoPlayer(_controller),
-              ),
-            );
-          } else {
-            // If the VideoPlayerController is still initializing, show a
-            // loading spinner.
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Wrap the play or pause in a call to `setState`. This ensures the
-          // correct icon is shown.
-          setState(() {
-            // If the video is playing, pause it.
-            if (_controller.value.isPlaying) {
-              _controller.pause();
-            } else {
-              // If the video is paused, play it.
-              _controller.play();
-            }
-          });
-        },
-        // Display the correct icon depending on the state of the player.
-        child: Icon(
-          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+            // return 
+            Center(
+              child: Chewie(
+        controller: chewieController,
+              )
+            ),
+            //   child: AspectRatio(
+            //     aspectRatio: _controller.value.aspectRatio,
+            //     // Use the VideoPlayer widget to display the video.
+            //     child: VideoPlayer(_controller),
+                
+            //   ),
+            // );
+        //   } else {
+        //     // If the VideoPlayerController is still initializing, show a
+        //     // loading spinner.
+        //     return Center(child: CircularProgressIndicator());
+        //   }
+        // },
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // Wrap the play or pause in a call to `setState`. This ensures the
+      //     // correct icon is shown.
+      //     setState(() {
+      //       // If the video is playing, pause it.
+      //       if (_controller.value.isPlaying) {
+      //         _controller.pause();
+      //       } else {
+      //         // If the video is paused, play it.
+      //         _controller.play();
+      //       }
+      //     });
+      //   },
+      //   // Display the correct icon depending on the state of the player.
+      //   child: Icon(
+      //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+      //   ),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

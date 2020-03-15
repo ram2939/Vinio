@@ -23,6 +23,10 @@ class ScreenRecorder {
     final String path =  await _channel.invokeMethod('changeFileName',x);
     return path;
   }
+  static Future<String> changeHD() async {
+    final String path =  await _channel.invokeMethod('changeHD');
+    return path;
+  }
    static Future<String> getFilePath() async {
      final String path = await _channel.invokeMethod('getFilePath');
      return path;

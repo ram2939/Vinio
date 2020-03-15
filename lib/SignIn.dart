@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:streaming_app/HomePage.dart';
 class SignIn extends StatefulWidget {
   @override
@@ -110,7 +110,7 @@ class SignInState extends State<SignIn> {
   }
 
   Future<void> signin(BuildContext) async {
-      final storage=Provider.of<FlutterSecureStorage>(context,listen: false);
+      final storage=FlutterSecureStorage();
     final formState = formKey.currentState;
     if (formState.validate()) {
       formState.save();

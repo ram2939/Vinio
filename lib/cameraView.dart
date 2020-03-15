@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-// import 'package:flutter_android_pip/flutter_android_pip.dart';
 
 List<CameraDescription> cameras;
 
@@ -30,7 +29,6 @@ class _CameraAppState extends State<CameraApp> {
   void initState() {
     super.initState();
     call(1);
-    // FlutterAndroidPip.enterPictureInPictureMode(1);
   }
 
   @override
@@ -61,7 +59,6 @@ class _CameraAppState extends State<CameraApp> {
                     iconSize: 50,
                     onPressed: () {
                       call(1);
-                      // CameraController(cameras[1], ResolutionPreset.medium);
                     },
                     tooltip: "Switch to Front Camera",
                   )
@@ -70,7 +67,6 @@ class _CameraAppState extends State<CameraApp> {
                     iconSize: 50,
                     onPressed: () {
                       call(0);
-                      //CameraController(cameras[0], ResolutionPreset.medium);
                     },
                     tooltip: "Switch to rear Camera",
                   )
