@@ -23,66 +23,71 @@ class _NewVideoState extends State<NewVideo> {
   bool rec = false;
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: ListView(
-        children: <Widget>[
-          CameraApp(pip),
-          Row(children: <Widget>[
-            !rec
-            ? Expanded(
-              child: IconButton(
-                icon: Icon(Icons.play_circle_outline),
-                iconSize: 50,
-                onPressed: () async {
-                  Fluttertoast.showToast(msg: "Recording Started");
-                  ScreenRecorder.changeFileName(fileName);
-                  ScreenRecorder.startRecordScreen();
-                  setState(() {
-                    pip = true;
-                    rec = true;
-                  });
-                },
-                tooltip: "Start Recording",
+    return WillPopScope(
+          onWillPop: (){
+            _displayDialog(context);
+          },
+          child: Material(
+        child: ListView(
+          children: <Widget>[
+            CameraApp(pip),
+            Row(children: <Widget>[
+              !rec
+              ? Expanded(
+                child: IconButton(
+                  icon: Icon(Icons.play_circle_outline),
+                  iconSize: 50,
+                  onPressed: () async {
+                    Fluttertoast.showToast(msg: "Recording Started");
+                    ScreenRecorder.changeFileName(fileName);
+                    ScreenRecorder.startRecordScreen();
+                    setState(() {
+                      pip = true;
+                      rec = true;
+                    });
+                  },
+                  tooltip: "Start Recording",
+                ),
+              )
+              :Container(),
+              Expanded(
+                child: IconButton(
+                  icon: Icon(Icons.cancel),
+                  iconSize: 50,
+                  onPressed: (){
+                    _displayDialog(context);
+                  },
+                  tooltip: "Cancel",
+                ),
               ),
+              rec
+                  ? Expanded(
+                      child: IconButton(
+                          icon: Icon(Icons.stop),
+                          iconSize: 50,
+                          onPressed: () async {
+                            ScreenRecorder.stopRecordScreen;
+                            Fluttertoast.showToast(
+                                msg: "$fileName.mp4 successfully saved");
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage(user)));
+                          },
+                          tooltip: "Stop Recording"),
+                    )
+                  : Container()
+            ]),
+            FlatButton(
+              clipBehavior: Clip.hardEdge,
+              textColor: Colors.blueAccent,
+              child: Text("Enter Small Screen mode"),
+              onPressed: () async {
+                ScreenRecorder.PIPmode;
+              },
             )
-            :Container(),
-            Expanded(
-              child: IconButton(
-                icon: Icon(Icons.cancel),
-                iconSize: 50,
-                onPressed: (){
-                  _displayDialog(context);
-                },
-                tooltip: "Cancel",
-              ),
-            ),
-            rec
-                ? Expanded(
-                    child: IconButton(
-                        icon: Icon(Icons.stop),
-                        iconSize: 50,
-                        onPressed: () async {
-                          ScreenRecorder.stopRecordScreen;
-                          Fluttertoast.showToast(
-                              msg: "$fileName.mp4 successfully saved");
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage(user)));
-                        },
-                        tooltip: "Stop Recording"),
-                  )
-                : Container()
-          ]),
-          FlatButton(
-            clipBehavior: Clip.hardEdge,
-            textColor: Colors.blueAccent,
-            child: Text("Enter Small Screen mode"),
-            onPressed: () async {
-              ScreenRecorder.PIPmode;
-            },
-          )
-        ],
+          ],
+        ),
       ),
     );
     // );

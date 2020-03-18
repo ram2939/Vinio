@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:streaming_app/NewVideo.dart';
 import 'package:streaming_app/ScreenRecorder.dart';
 import 'package:streaming_app/VideoPlayer.dart';
-import 'package:streaming_app/LoginPage.dart';
+// import 'package:streaming_app/LoginPage.dart';
+// import 'package:video_player/video_player.dart';
 
 // import 'package:streaming_app/ScreenRecorder.dart';
 // import 'package:video_thumbnail/video_thumbnail.dart';
@@ -47,6 +48,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _updateList();
+    
 
   }
 
@@ -78,26 +80,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(user.email),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.exit_to_app),
-                onPressed: () async {
-                  if (storage.read(key: '1') == "email")
-                    await firebaseAuth.signOut();
-                  else
-                    await GoogleSignIn().signOut();
-                  storage.delete(key: "1");
-                  Fluttertoast.showToast(
-                      msg: "You have been successfully logged out");
-                  Navigator.of(context).pop();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => new LoginPage()));
-                },
-                tooltip: "Logout"),
-          ],
-        ),
+        // appBar: AppBar(
+        //   title: Text(user.email),
+        //   backgroundColor: Colors.pink[300],
+        //   actions: <Widget>[
+        //     IconButton(
+        //         icon: Icon(Icons.exit_to_app),
+        //         onPressed: () async {
+        //           
+        //         tooltip: "Logout"),
+        //   ],
+        // ),
+        // backgroundColor: Colors.pink[100],
         floatingActionButton: CircleAvatar(
           child: IconButton(
             icon: Icon(Icons.add_a_photo),
@@ -115,54 +109,7 @@ class _HomePageState extends State<HomePage> {
               )
             : ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    subtitle: FutureBuilder(
-                        future: x[index].stat().then((FileStat fileStat) {
-                          return fileStat.changed.toString();
-                        }),
-                        builder: (context, snapshot) {
-                          return Text(
-                              "\n" + snapshot.data.toString().split(" ").first);
-                        }),
-                    title: Row(
-                      children: <Widget>[
-                        Flexible(
-                          flex: 2,
-                          child: Container(
-                              color: Colors.white,
-                              height: 50,
-                              // width: 220,
-                              // margin: EdgeInsets.all(10),
-                              child: Center(
-                                  child: Text(x[index].path.split('/').last))),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.play_circle_outline),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        VideoPlayerScreen(x[index].path)));
-                          },
-                          tooltip: "Play the video",
-                        ),
-                        IconButton(
-                            icon: Icon(Icons.share),
-                            onPressed: () {
-                              _share(x[index].path);
-                            },
-                            tooltip: "Share the video"),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            _displayDeleteDialog(context, x[index]);
-                          },
-                          tooltip: "Delete the video",
-                        ),
-                      ],
-                    ),
-                  );
+                  return ListItem(x[index]);
                 },
                 itemCount: x.length,
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -214,15 +161,9 @@ class _HomePageState extends State<HomePage> {
               Text("HD"),
               Switch(
                 onChanged: (bool value) {
-                  if (!value) {
-                    setState(() {
-                      isHD = false;
-                    });
-                  } else {
-                    setState(() {
-                      isHD = true;
-                    });
-                  }
+                  setState(() {
+                    isHD=!isHD;
+                  });
                 },
                 value: isHD,
               ),
@@ -236,7 +177,7 @@ class _HomePageState extends State<HomePage> {
               new FlatButton(
                 child: new Text('NEXT'),
                 onPressed: () {
-                  if (!fileName.text.isEmpty) {
+                  if (fileName.text.isNotEmpty) {
                     var file = fileName.text;
                     bool original = true;
                     FileSystemEntity y;
@@ -246,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                     }
                     if (original) {
                       fileName.text = "";
-                      if (isHD) ScreenRecorder.changeHD();
+                      ScreenRecorder.changeHD(isHD);
                       Navigator.of(context).pop();
                       Navigator.pushReplacement(
                           context,
@@ -261,5 +202,118 @@ class _HomePageState extends State<HomePage> {
             ],
           );
         });
+  }
+  // getVideoDuration(File file)
+  // {
+  //   VideoPlayerController videoPlayerController=VideoPlayerController.file(file)..initialize().then((){
+  //       return 
+  //   });
+  // }
+  Widget ListItem(FileSystemEntity file)
+  {
+
+    File fileProperties=File(file.path);
+    // var video=VideoPlayerController.file(fileProperties);
+    return ListTile(
+                // subtitle: 
+                title: Container(
+                  margin: EdgeInsets.only(top:10),
+                  padding: EdgeInsets.only(left:20,right: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(0),
+                    color: Colors.pink[100],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 30,
+                            child: IconButton(
+                              icon: Icon(Icons.play_arrow),
+                              iconSize: 40,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          VideoPlayerScreen(file.path)));
+                              },
+                              tooltip: "Play the recording",
+                            ),
+                          ),
+                          // Text(video.value.duration.toString()),
+                    // FutureBuilder(
+                    // future: video.initialize(),
+                    // builder: (context, snapshot) {
+                    //   if(snapshot.connectionState==ConnectionState.done)
+                    //   return 
+                    //   Container(
+                    //     color: Colors.black,
+                    //     child: Text(
+                    //      video.value.duration.toString().split(".").first,
+                    //      style: TextStyle(
+                    //        color: Colors.white
+                    //      ),),
+                         
+                    //   );
+                    //   else return Text("...");
+                    // }
+                    // ),
+                          
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Center(
+                              child: Text("Title: "+(file.path.split('/').last).split(".").first)
+                              ),
+                              Center(
+                                child: FutureBuilder(
+                    future: file.stat().then((FileStat fileStat) {
+                      return fileStat.changed.toString();
+                    }),
+                    builder: (context, snapshot) {
+                      return Text(
+                       "Date: " + snapshot.data.toString().split(" ").first);
+                    }),
+                              ),
+                      Center(
+                        child: Text("Size: "+(fileProperties.lengthSync()/(1000*1000)).toStringAsPrecision(3)+" MB"),
+                      ),  
+                        ],
+                      ),
+                      // IconButton(
+                      //   icon: Icon(Icons.play_circle_outline),
+                      //   onPressed: () {
+                          
+                      //   },
+                      //   tooltip: "Play the video",
+                      // ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          IconButton(
+                              icon: Icon(Icons.share),
+                              onPressed: () {
+                                _share(file.path);
+                              },
+                              tooltip: "Share the video"),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          _displayDeleteDialog(context, file);
+                        },
+                        tooltip: "Delete the video",
+                      ),
+                      ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
   }
 }

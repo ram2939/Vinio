@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:provider/provider.dart';
-import 'package:streaming_app/HomePage.dart';
+// import 'package:streaming_app/HomePage.dart';
 import 'package:streaming_app/LoginPage.dart';
+import 'package:streaming_app/MainPage.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
      var email =await storage.read(key: '2');
      var pass =await storage.read(key: '3');
      FirebaseUser user= (await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: pass)).user;
-     return HomePage(user);
+     return MainPage(user);
    }
    loginWithGoogle() async
    {
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
 
     final FirebaseUser user =
         (await _auth.signInWithCredential(credential)).user;
-     return HomePage(user);
+     return MainPage(user);
    }
   // // This widget is the root of your application.
   @override

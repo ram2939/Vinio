@@ -55,7 +55,9 @@ class MainActivity: FlutterActivity(),HBRecorderListener{
             enterPictureInPictureMode(PictureInPictureParams.Builder().setAspectRatio(Rational(1,1)).build());        
            }
            else if(call.method=="changeHD"){
+               if(call.arguments.toString()=="true")
                hbRecorder.recordHDVideo(true);
+               else hbRecorder.recordHDVideo(false);
            }
             else {
                 result.notImplemented()

@@ -1,52 +1,58 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:streaming_app/SignIn.dart';
+import 'package:streaming_app/my_flutter_app_icons.dart';
 class SignUp extends StatefulWidget {
   @override
   SignUpState createState() => SignUpState();
 }
 
 class SignUpState extends State<SignUp> {
+  bool showPass=false;
   String email = "", password = "";
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    OutlineInputBorder outlineInputBorder= OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).accentColor,
-                        width: 2
-                      )
-                    );
+    // OutlineInputBorder outlineInputBorder= OutlineInputBorder(
+    //                   borderRadius: BorderRadius.circular(20),
+    //                   borderSide: BorderSide(
+    //                     color: Theme.of(context).accentColor,
+    //                     width: 2
+                    //   )
+                    // );
     return Scaffold(
       appBar: AppBar(
         title: Text("Sign Up"),
+        backgroundColor: Colors.pink[300],
       ),
+      backgroundColor: Colors.pink[100],
       body: SafeArea(
               child: Form(
           key: formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(top: 60,left: 20,right: 20,bottom: 20),
                 child: TextFormField(
                   validator: (input) {
                     if (input.isEmpty) return "Enter the Email ID";
                   },
                   decoration: InputDecoration(
-                    labelText: "Email",
-                    labelStyle: TextStyle(
-                      color: Theme.of(context).accentColor
-                    ),
+                    // labelText: "Email",
+                    // labelStyle: TextStyle(
+                    //   color: Theme.of(context).accentColor
+                    // ),
+                    fillColor: Colors.white,
+                    filled: true,
                     hintStyle: TextStyle(
                       color:Colors.grey
                     ) ,
-                    hintText: "Enter the email id",
-                    enabledBorder: outlineInputBorder,
-                    focusedErrorBorder: outlineInputBorder,
-                    errorBorder: outlineInputBorder,
-                    focusedBorder: outlineInputBorder,
+                    hintText: "Email",
+                    // enabledBorder: outlineInputBorder,
+                    // focusedErrorBorder: outlineInputBorder,
+                    // errorBorder: outlineInputBorder,
+                    // focusedBorder: outlineInputBorder,
 
                   ),
                   onSaved: (input) {
@@ -55,38 +61,50 @@ class SignUpState extends State<SignUp> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 20,right: 20,top: 20,bottom:50),
                 child: TextFormField(
                   validator: (input) {
                     if (input.length < 6)
                       return "Password needs to be greater than 6 characters";
                   },
                   decoration: InputDecoration(
-                    labelText: "Password",
-                    labelStyle: TextStyle(
-                      color: Theme.of(context).accentColor
+                    // labelText: "Password",
+                    // labelStyle: TextStyle(
+                    //   color: Theme.of(context).accentColor
+                    // ),
+                    suffixIcon: IconButton(
+                      icon: showPass==true
+                      ? Icon(MyFlutterApp.eye)
+                      : Icon(MyFlutterApp.eye_off),
+                      onPressed: (){
+                        setState(() {
+                          showPass=!showPass;
+                        });
+                      },
                     ),
+                    fillColor: Colors.white,
+                    filled: true,
                     hintStyle: TextStyle(
                       color:Colors.grey
                     ) ,
-                    hintText: "Enter the Password",
-                    enabledBorder: outlineInputBorder,
-                    focusedErrorBorder: outlineInputBorder,
-                    errorBorder: outlineInputBorder,
-                    focusedBorder: outlineInputBorder,
+                    hintText: "Password",
+                    // enabledBorder: outlineInputBorder,
+                    // focusedErrorBorder: outlineInputBorder,
+                    // errorBorder: outlineInputBorder,
+                    // focusedBorder: outlineInputBorder,
   
                   ),
                   onSaved: (input) {
                     password = input;
                   },
-                  obscureText: true,
+                  obscureText: !showPass,
                 ),
               ),
               GestureDetector(
                 child: Container(child: Center(child: Text("Sign Up")),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blueAccent[400]
+                  borderRadius: BorderRadius.circular(50),
+                  color: Colors.pink[300]
                 ),
 
                 height: 50,
