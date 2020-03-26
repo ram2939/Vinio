@@ -1,5 +1,5 @@
-# streaming_app
-
+# Vinio
+A Screen Recording app for android devices. It offers features to record screen while using your camera in PIP mode
 A new Flutter project.
 
 ## Getting Started
