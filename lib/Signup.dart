@@ -13,19 +13,19 @@ class SignUpState extends State<SignUp> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    // OutlineInputBorder outlineInputBorder= OutlineInputBorder(
-    //                   borderRadius: BorderRadius.circular(20),
-    //                   borderSide: BorderSide(
-    //                     color: Theme.of(context).accentColor,
-    //                     width: 2
-                    //   )
-                    // );
+    OutlineInputBorder outlineInputBorder= OutlineInputBorder(
+                      // borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(
+                        color: Colors.black,
+                        // width: 2
+                      )
+                    );
     return Scaffold(
       appBar: AppBar(
         title: Text("Sign Up"),
-        backgroundColor: Colors.pink[300],
+        backgroundColor: Color(0xffFA817E),
       ),
-      backgroundColor: Colors.pink[100],
+      // backgroundColor: Colors.pink[100],
       body: SafeArea(
               child: Form(
           key: formKey,
@@ -33,7 +33,7 @@ class SignUpState extends State<SignUp> {
             // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 60,left: 20,right: 20,bottom: 20),
+                padding: const EdgeInsets.only(top: 60,left: 20,right: 20,bottom: 10),
                 child: TextFormField(
                   validator: (input) {
                     if (input.isEmpty) return "Enter the Email ID";
@@ -49,10 +49,10 @@ class SignUpState extends State<SignUp> {
                       color:Colors.grey
                     ) ,
                     hintText: "Email",
-                    // enabledBorder: outlineInputBorder,
-                    // focusedErrorBorder: outlineInputBorder,
-                    // errorBorder: outlineInputBorder,
-                    // focusedBorder: outlineInputBorder,
+                    enabledBorder: outlineInputBorder,
+                    focusedErrorBorder: outlineInputBorder,
+                    errorBorder: outlineInputBorder,
+                    focusedBorder: outlineInputBorder,
 
                   ),
                   onSaved: (input) {
@@ -61,7 +61,7 @@ class SignUpState extends State<SignUp> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 20,right: 20,top: 20,bottom:50),
+                padding: const EdgeInsets.only(left: 20,right: 20,top: 10,bottom:50),
                 child: TextFormField(
                   validator: (input) {
                     if (input.length < 6)
@@ -88,10 +88,10 @@ class SignUpState extends State<SignUp> {
                       color:Colors.grey
                     ) ,
                     hintText: "Password",
-                    // enabledBorder: outlineInputBorder,
-                    // focusedErrorBorder: outlineInputBorder,
-                    // errorBorder: outlineInputBorder,
-                    // focusedBorder: outlineInputBorder,
+                    enabledBorder: outlineInputBorder,
+                    focusedErrorBorder: outlineInputBorder,
+                    errorBorder: outlineInputBorder,
+                    focusedBorder: outlineInputBorder,
   
                   ),
                   onSaved: (input) {
@@ -104,7 +104,7 @@ class SignUpState extends State<SignUp> {
                 child: Container(child: Center(child: Text("Sign Up")),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: Colors.pink[300]
+                  color: Color(0xffFA817E)
                 ),
 
                 height: 50,

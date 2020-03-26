@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   FirebaseUser user;
   bool isHD = false;
   List<FileSystemEntity> x = [];
-  var dir = Directory('/storage/emulated/0/Movies/StreamingApp');
+  var dir = Directory('/storage/emulated/0/Movies/Vinio');
   // String _tempDir;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   _HomePageState(this.user);
@@ -48,8 +49,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _updateList();
-    
-
   }
 
   // _getPath() async {
@@ -76,7 +75,7 @@ class _HomePageState extends State<HomePage> {
     await FlutterShare.shareFile(title: "Share video", filePath: x);
   }
 
-  FlutterSecureStorage storage = FlutterSecureStorage();
+  // FlutterSecureStorage storage = FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,21 +86,29 @@ class _HomePageState extends State<HomePage> {
         //     IconButton(
         //         icon: Icon(Icons.exit_to_app),
         //         onPressed: () async {
-        //           
+        //
         //         tooltip: "Logout"),
         //   ],
         // ),
         // backgroundColor: Colors.pink[100],
-        floatingActionButton: CircleAvatar(
-          child: IconButton(
-            icon: Icon(Icons.add_a_photo),
-            onPressed: () {
-              _displayDialog(context);
-            },
-            tooltip: "Create a new Recording",
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(right:20.0),
+          child: CircleAvatar(
+            child: Center(
+              child: IconButton(
+                icon: Icon(Icons.video_call),
+                iconSize: 35,
+                color: Colors.white,
+                onPressed: () {
+                  _displayDialog(context);
+                },
+                tooltip: "Create a new Recording",
+              ),
+            ),
+            backgroundColor: Color(0xffFA817E),
+            radius: 35,
           ),
-          backgroundColor: Colors.blueAccent,
-          radius: 30,
         ),
         body: x.isEmpty
             ? Center(
@@ -145,7 +152,6 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  
   _displayDialog(BuildContext context) async {
     return showDialog(
         context: context,
@@ -162,7 +168,7 @@ class _HomePageState extends State<HomePage> {
               Switch(
                 onChanged: (bool value) {
                   setState(() {
-                    isHD=!isHD;
+                    isHD = !isHD;
                   });
                 },
                 value: isHD,
@@ -203,117 +209,165 @@ class _HomePageState extends State<HomePage> {
           );
         });
   }
+
   // getVideoDuration(File file)
   // {
   //   VideoPlayerController videoPlayerController=VideoPlayerController.file(file)..initialize().then((){
-  //       return 
+  //       return
   //   });
   // }
-  Widget ListItem(FileSystemEntity file)
-  {
-
-    File fileProperties=File(file.path);
-    // var video=VideoPlayerController.file(fileProperties);
-    return ListTile(
-                // subtitle: 
-                title: Container(
-                  margin: EdgeInsets.only(top:10),
-                  padding: EdgeInsets.only(left:20,right: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(0),
-                    color: Colors.pink[100],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          CircleAvatar(
-                            radius: 30,
-                            child: IconButton(
-                              icon: Icon(Icons.play_arrow),
-                              iconSize: 40,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          VideoPlayerScreen(file.path)));
-                              },
-                              tooltip: "Play the recording",
-                            ),
-                          ),
-                          // Text(video.value.duration.toString()),
+  final FlutterFFmpeg fFmpeg = FlutterFFmpeg();
+  Widget ListItem(FileSystemEntity file) {
+    File fileProperties = File(file.path);
+    return Column(
+      children: <Widget>[
+        ListTile(
+          contentPadding: EdgeInsets.all(0),
+          dense: true,
+          // subtitle:
+          title: Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(left: 20, right: 5),
+            decoration: BoxDecoration(
+              border: Border(
+              
+                // color: Colors.black
+                // top: BorderSide(color:Colors.black)
+                // width: 
+              ),
+              borderRadius: BorderRadius.circular(0),
+              // color: Color(0xffFA817E),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    CircleAvatar(
+                      radius: 30,
+                      child: IconButton(
+                        icon: Icon(Icons.play_arrow),
+                        iconSize: 40,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      VideoPlayerScreen(file.path,false)));
+                        },
+                        tooltip: "Play the recording",
+                      ),
+                    ),
+                    // Text(video.value.duration.toString()),
                     // FutureBuilder(
-                    // future: video.initialize(),
+                    // future: fFmpeg.execute("-i ${file.path} -hide_banner").then((info){
+                    //   duration=info.toString();
+                    // }),
                     // builder: (context, snapshot) {
                     //   if(snapshot.connectionState==ConnectionState.done)
-                    //   return 
+                    //   return
                     //   Container(
                     //     color: Colors.black,
                     //     child: Text(
-                    //      video.value.duration.toString().split(".").first,
+                    //      duration,
                     //      style: TextStyle(
                     //        color: Colors.white
                     //      ),),
-                         
+
                     //   );
                     //   else return Text("...");
                     // }
                     // ),
-                          
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Center(
-                              child: Text("Title: "+(file.path.split('/').last).split(".").first)
-                              ),
-                              Center(
-                                child: FutureBuilder(
-                    future: file.stat().then((FileStat fileStat) {
-                      return fileStat.changed.toString();
-                    }),
-                    builder: (context, snapshot) {
-                      return Text(
-                       "Date: " + snapshot.data.toString().split(" ").first);
-                    }),
-                              ),
-                      Center(
-                        child: Text("Size: "+(fileProperties.lengthSync()/(1000*1000)).toStringAsPrecision(3)+" MB"),
-                      ),  
-                        ],
-                      ),
-                      // IconButton(
-                      //   icon: Icon(Icons.play_circle_outline),
-                      //   onPressed: () {
-                          
-                      //   },
-                      //   tooltip: "Play the video",
-                      // ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          IconButton(
-                              icon: Icon(Icons.share),
-                              onPressed: () {
-                                _share(file.path);
-                              },
-                              tooltip: "Share the video"),
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          _displayDeleteDialog(context, file);
-                        },
-                        tooltip: "Delete the video",
-                      ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left:20.0),
+                  child: Container(
+                    width: 200,
+                    child: GestureDetector(
+                      onTap:(){
+                        Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          VideoPlayerScreen(file.path,false)));
+                      },
+                      child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("Title: " +
+                            (file.path.split('/').last).split(".").first,
+                            style:TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                            ) ,),
+                            
+                        Padding(
+                          padding: const EdgeInsets.only(top:10.0),
+                          child: FutureBuilder(
+                              future: file.stat().then((FileStat fileStat) {
+                                return fileStat.changed.toString();
+                              }),
+                              builder: (context, snapshot) {
+                                return Text("Date: " +
+                                    snapshot.data.toString().split(" ").first,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey
+                                    ),);
+                              }),
+                        ),
+                        Text("Size: " +
+                            (fileProperties.lengthSync() / (1000 * 1000))
+                                .toStringAsPrecision(3) +
+                            " MB",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey
+                            ),),
                       ],
-                      ),
-                    ],
+                    ),
+                    ),
                   ),
                 ),
-              );
+                // IconButton(
+                //   icon: Icon(Icons.play_circle_outline),
+                //   onPressed: () {
+
+                //   },
+                //   tooltip: "Play the video",
+                // ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    IconButton(
+                        icon: Icon(Icons.share),
+                        onPressed: () {
+                          _share(file.path);
+                        },
+                        tooltip: "Share the video"),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _displayDeleteDialog(context, file);
+                      },
+                      tooltip: "Delete the video",
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Divider(
+          thickness: 0.2,
+          color: Colors.grey,
+        )
+      ],
+    );
   }
 }
+                                                   

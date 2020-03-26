@@ -6,7 +6,7 @@ import 'package:streaming_app/MainPage.dart';
 import 'package:streaming_app/my_flutter_app_icons.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:provider/provider.dart';
-import 'package:streaming_app/HomePage.dart';
+// import 'package:streaming_app/HomePage.dart';
 // import 'package:streaming_app/Widgets/textField.dart';
 class SignIn extends StatefulWidget {
   @override
@@ -14,15 +14,15 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
-    String email = "", password = "";
+  String email = "", password = "";
   TextEditingController _email, _pass;
-  bool showPass=false;
+  bool showPass = false;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<FirebaseUser> _handleSignIn(BuildContext context) async {
-    final storage=FlutterSecureStorage();
+    final storage = FlutterSecureStorage();
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -41,24 +41,21 @@ class SignInState extends State<SignIn> {
     return user;
   }
 
+  String message = "";
   @override
   Widget build(BuildContext context) {
-    //  OutlineInputBorder outlineInputBorder= OutlineInputBorder(
-    //                   borderRadius: BorderRadius.circular(50),
-    //                   borderSide: BorderSide(
-    //                     color:Colors.white
-    //                   )
-    //                 );
+    OutlineInputBorder outlineInputBorder = OutlineInputBorder(
+        // borderRadius: BorderRadius.circular(50),
+        borderSide: BorderSide(color: Colors.black));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink[300],
+        backgroundColor: Color(0xffFA817E),
         title: Padding(
-          padding: EdgeInsets.only(left:100),
-          child: Text("Sign In")),
+            padding: EdgeInsets.only(left: 100), child: Text("Sign In")),
         // toolbarOpacity: 1,
       ),
 
-      backgroundColor: Colors.pink[100],
+      // backgroundColor: Color(0xffFA817E),
       body: Form(
         key: formKey,
         child: Padding(
@@ -67,10 +64,16 @@ class SignInState extends State<SignIn> {
             // mainAxisAlignment: MainAxisAlignment,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 60,left: 20,right: 20,bottom: 20),
+                padding: const EdgeInsets.only(
+                    top: 60, left: 20, right: 20, bottom: 10),
                 child: TextFormField(
                   // textAlign: TextAlign.center,
                   controller: _email,
+                  onChanged: (input) {
+                    setState(() {
+                      email = input;
+                    });
+                  },
                   validator: (input) {
                     if (input.isEmpty) return "Enter the Email ID";
                   },
@@ -78,23 +81,22 @@ class SignInState extends State<SignIn> {
                     filled: true,
                     fillColor: Colors.white,
                     hintStyle: TextStyle(
-                      color:Colors.black,
+                      color: Colors.black,
                     ),
-                    
                     hintText: "Email",
-                    // enabledBorder: outlineInputBorder,
-                    // focusedBorder: outlineInputBorder,
-                    // errorBorder: outlineInputBorder,
-                    // focusedErrorBorder: outlineInputBorder,
-                    
+                    enabledBorder: outlineInputBorder,
+                    focusedBorder: outlineInputBorder,
+                    errorBorder: outlineInputBorder,
+                    focusedErrorBorder: outlineInputBorder,
                   ),
-                                  onSaved: (input) {
+                  onSaved: (input) {
                     email = input;
                   },
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.only(
+                    top: 10, left: 20, bottom: 10, right: 20),
                 child: TextFormField(
                   // textAlign: TextAlign.center,
                   controller: _pass,
@@ -103,27 +105,24 @@ class SignInState extends State<SignIn> {
                       return "Password needs to be greater than 6 characters";
                   },
                   decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: showPass==true
-                      ? Icon(MyFlutterApp.eye)
-                      : Icon(MyFlutterApp.eye_off),
-                      onPressed: (){
-                        setState(() {
-                          showPass=!showPass;
-                        });
-                      },
-                    ),
-                    hintStyle: TextStyle(
-                      color:Colors.black
-                    ),
-                    filled: true,
-                    hintText: "Password",
-                    fillColor: Colors.white,
-                    // enabledBorder:outlineInputBorder ,
-                    // focusedBorder: outlineInputBorder,
-                    // errorBorder: outlineInputBorder,
-                    // focusedErrorBorder: outlineInputBorder
-                  ),
+                      suffixIcon: IconButton(
+                        icon: showPass == true
+                            ? Icon(MyFlutterApp.eye)
+                            : Icon(MyFlutterApp.eye_off),
+                        onPressed: () {
+                          setState(() {
+                            showPass = !showPass;
+                          });
+                        },
+                      ),
+                      hintStyle: TextStyle(color: Colors.black),
+                      filled: true,
+                      hintText: "Password",
+                      fillColor: Colors.white,
+                      enabledBorder: outlineInputBorder,
+                      focusedBorder: outlineInputBorder,
+                      errorBorder: outlineInputBorder,
+                      focusedErrorBorder: outlineInputBorder),
                   onSaved: (input) {
                     password = input;
                   },
@@ -131,54 +130,71 @@ class SignInState extends State<SignIn> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left:200,bottom: 20),
+                padding: const EdgeInsets.only(left: 200, bottom: 20),
                 child: GestureDetector(
-                                  child: Text("Forgot Password?",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18
-                  ),
+                  onTap: () async {
+                    if (email.isNotEmpty) {
+                      try {
+                        await FirebaseAuth.instance
+                            .sendPasswordResetEmail(email: email);
+                        showAlert(
+                            context,
+                            "The email for reset password has been successfully sent to your email id",
+                            "Reset Passwor Mail sent");
+                      } catch (e) {
+                        showAlert(context, e.message, "Cannot Reset Password");
+                      }
+                    } else {
+                      showAlert(
+                          context, "Email is empty", "Cannot Reset Password");
+                    }
+                  },
+                  child: Container(
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
                   ),
                 ),
               ),
-            
               GestureDetector(
-                child: Container(child: Center(child: Text("Sign In")),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.pink[300]
+                child: Container(
+                  child: Center(child: Text("Sign In")),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Color(0xffFA817E)),
+                  height: 50,
+                  width: 150,
                 ),
-
-                height: 50,
-                width: 150,),
                 onTap: () {
                   signin(context);
                 },
               ),
               Padding(
-                padding: EdgeInsets.only(top:20,left:00,bottom:10),
-                child: Text("Or Sign in with",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18
-                ),
+                padding: EdgeInsets.only(top: 20, left: 00, bottom: 10),
+                child: Text(
+                  "Or Sign in with",
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ),
-              Padding(padding: EdgeInsets.all(0),
-              child: IconButton(
-                icon: Icon(MyFlutterApp.gplus_squared),
-                iconSize: 80,
-                onPressed: ()
-                {
+              Padding(
+                padding: EdgeInsets.all(0),
+                child: IconButton(
+                  icon: Icon(MyFlutterApp.gplus_squared),
+                  iconSize: 80,
+                  onPressed: () {
                     _handleSignIn(context).then((FirebaseUser user) {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MainPage(user)));
-                      });
-                },
-              ),)
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainPage(user)));
+                    });
+                  },
+                ),
+              )
             ],
           ),
         ),
@@ -187,7 +203,7 @@ class SignInState extends State<SignIn> {
   }
 
   Future<void> signin(BuildContext context) async {
-      final storage=FlutterSecureStorage();
+    final storage = FlutterSecureStorage();
     final formState = formKey.currentState;
     if (formState.validate()) {
       formState.save();
@@ -195,21 +211,21 @@ class SignInState extends State<SignIn> {
         FirebaseUser user = (await FirebaseAuth.instance
                 .signInWithEmailAndPassword(email: email, password: password))
             .user;
-          await storage.write(key: "1", value: "email");
-          await storage.write(key: "2", value: email);
-          await storage.write(key: "3", value: password);
-         Navigator.pop(context);
-         Navigator.pushReplacement(
-             context, MaterialPageRoute(builder: (context) => MainPage(user)));
+        await storage.write(key: "1", value: "email");
+        await storage.write(key: "2", value: email);
+        await storage.write(key: "3", value: password);
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainPage(user)));
       } catch (e) {
         print(e.message);
-        showAlert(context, e.message);
+        showAlert(context, e.message, "Cannot Sign In");
       }
     }
   }
 
-  void showAlert(BuildContext context, String x) {
-    var alert = AlertDialog(title: Text("Cannot Sign In"), content: Text(x));
+  void showAlert(BuildContext context, String x, String y) {
+    var alert = AlertDialog(title: Text(y), content: Text(x));
     showDialog(
         context: context,
         builder: (BuildContext context) {

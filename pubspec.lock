@@ -132,6 +132,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_ffmpeg:
+    dependency: "direct main"
+    description:
+      name: flutter_ffmpeg
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.10"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -212,6 +219,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.1+1"
+  local_notifications:
+    dependency: "direct main"
+    description:
+      name: local_notifications
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   matcher:
     dependency: transitive
     description:

@@ -5,7 +5,6 @@ import 'package:streaming_app/SignIn.dart';
 import 'package:streaming_app/Signup.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 class LoginPage extends StatelessWidget {
   requestPermissions() async {
     await PermissionHandler().requestPermissions([
@@ -18,12 +17,13 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     requestPermissions();
     BoxDecoration decoration = BoxDecoration(
-        borderRadius: BorderRadius.circular(10), color: Colors.redAccent);
+      // border: Border.all(),
+        borderRadius: BorderRadius.circular(40), color: Color(0xffFA817E));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login"),
-      ),
+      // appBar: AppBar(
+      //     title: Center(child: Text("Vinio")),
+      //     backgroundColor: Color(0xffFA817E)),
       body: SafeArea(
         child: Center(
           child: Column(
@@ -31,6 +31,75 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
+              Padding(padding: const EdgeInsets.only(bottom: 10),
+              child: Center(child: Text("Vinio",
+              style: TextStyle(
+                fontSize: 100,
+                fontWeight: FontWeight.bold
+              ),)),),
+             Padding(
+               padding: const EdgeInsets.only(top: 10.0),
+               child: Image(image: AssetImage("assets/logo.png"),
+               height: 200,
+               ),
+             ),
+             Padding(
+               padding: const EdgeInsets.only(top: 50,bottom: 20),
+               child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.center,
+                 children: <Widget>[
+                   
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: <Widget>[
+                       Text("Experience  ",
+                       textAlign: TextAlign.center,
+                       style: TextStyle(
+                         color: Colors.grey,
+                         fontSize: 35,
+                       ),
+                       ),
+                       Text("the",
+                       textAlign: TextAlign.center,
+                       style: TextStyle(
+                         color: Colors.grey,
+                         fontSize: 25,
+                       ),
+                       ),
+                     ],
+                   ),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: <Widget>[
+                       Text("Future  ",
+                       textAlign: TextAlign.center,
+                       style: TextStyle(
+                         color: Colors.grey,
+                         fontSize: 35,
+                       ),
+                       ),
+                       Text("of",
+                       textAlign: TextAlign.center,
+                       style: TextStyle(
+                         color: Colors.grey,
+                         fontSize: 25,
+                       ),
+                       ),
+                     ],
+                   ),
+                   Text("Expressions",
+                      //  textAlign: TextAlign.center,
+                       style: TextStyle(
+                         color: Colors.grey,
+                         fontSize: 35,
+                       ),
+                       ),
+
+                 ],
+               ),
+             ),
+
+
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(

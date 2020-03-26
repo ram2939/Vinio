@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
                 height: 50,
                 width: 150,
                 decoration: BoxDecoration(
-                  color:Colors.pink[300],
+                  color:Color(0xffFA817E),
                   borderRadius: BorderRadius.circular(50)
                 ),
                 child: Center(child: Text("Change Password")),
@@ -49,7 +49,7 @@ class _ProfileState extends State<Profile> {
                       child: Container(child: Center(child: Text("Sign Out")),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: Colors.pink[300]
+                        color: Color(0xffFA817E)
                       ),
 
                       height: 50,
@@ -75,6 +75,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 _displayDialog(BuildContext context) async {
+  bool showPass=false;
     // TextEditingController oldPass=TextEditingController();
     TextEditingController newPass=TextEditingController();
     return showDialog(
@@ -82,7 +83,7 @@ _displayDialog(BuildContext context) async {
         builder: (context) {
           return StatefulBuilder(
                      builder: (BuildContext context, StateSetter setState){
-                       bool showPass=false;
+                       
                     return  AlertDialog(
               title: Text('Change Password'),
               content: TextField(
